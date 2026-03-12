@@ -1,19 +1,100 @@
 /* Task 1: Style the body */
 body {
-    /* insert code here */
+  font-family: "Montserrat", sans-serif;
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  overflow: hidden;
+  background-color: #f4f4f4;
 }
 
 /* Task 2: Create a pseudo-element for the background and blur */
 body::before {
-    /* insert code here */
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url("/static/background-colors.jpg") no-repeat center center;
+  background-size: cover;
+  background-position: center;
+  filter: blur(5px);
 }
 
 /* Task 3: Style the content area */
 .content {
-    /* insert code here */
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  padding: 20px;
+  margin: 0 auto;
+  max-width: 1200px;
+  background-color: rgba(255, 255, 255, 0.8);
+  border-radius: 10px;
 }
 
 /* Task 4: Add styles for headings, paragraphs, and buttons */
-h1, h2, .lead, .btn-primary {
-    /* insert code here */
+/* Customize font size, weight, and color for max-width, h2
+Style .lead for the quote
+Adjust .btn-primary for the button’s visual design */
+h1,
+h2 {
+  color: #333;
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+
+.lead {
+  font-size: 1.25em;
+  font-style: italic;
+  color: #555;
+  margin-bottom: 30px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.btn-primary {
+  color: #333;
+  font-size: 1.5em;
+  font-weight: 600;
+  margin-bottom: 20px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  background-color: #007bff;
+  color: #fff;
+  text-decoration: none;
+  display: inline-block;
+  transition: background-color 0.3s ease;
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+  background-color: #0056b3;
+  color: #fff;
+}
+
+@media (max-width: 768px) {
+  .content {
+    padding: 15px;
+  }
+
+  h1 {
+    font-size: 2em;
+  }
+
+  h2 {
+    font-size: 1.5em;
+  }
+
+  .lead {
+    font-size: 1em;
+  }
+
+  .btn-primary {
+    font-size: 1.25em;
+    padding: 8px 16px;
+  }
 }
