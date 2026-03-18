@@ -52,7 +52,7 @@ function MainPage() {
       <div className="row justify-content-md-center">
         {gifts.map((gift) => (
           <div key={gift.id} className="col-md-4 mb-4">
-            <div className="card product-card">
+            <div className="card product-card border-0 shadow-sm rounded-2">
               {/* // Task 4: Display gift image or placeholder */}
               {/* // Write your code below this line */}
               <div className="image-placeholder">

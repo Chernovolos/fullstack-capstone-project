@@ -146,7 +146,10 @@ function SearchPage() {
           searchResults.map((product) => (
             <div className="col-md-4" key={product.id}>
               <div className="search-results mt-4">
-                <div key={product.id} className="card mb-3">
+                <div
+                  key={product.id}
+                  className="card mb-3 border-0 shadow-sm rounded-2"
+                >
                   {product.image && (
                     <img
                       src={product.image}
