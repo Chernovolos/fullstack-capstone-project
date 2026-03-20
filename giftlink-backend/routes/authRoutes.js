@@ -51,4 +51,41 @@ router.post("/register", async (req, res, next) => {
   }
 });
 
+router.post("/login", async (req, res, next) => {
+  try {
+    const db = await connectToDatabase();
+    const collection = db.collection("users");
+    const user = await collection.findOne({ email: req.body.email });
+
+    if (user) {
+      const passwordMatch = await bcryptjs.compare(
+        req.body.password,
+        user.password,
+      );
+      if (!passwordMatch) {
+        logger.info("Invalid password");
+        return res.status(400).json({ error: "Invalid credentials" });
+      }
+
+      const payload = {
+        user: {
+          id: user._id.toString(),
+        },
+      };
+
+      const userName = user.firstName;
+      const userEmail = user.email;
+
+      const authtoken = jwt.sign(payload, JWT_SECRET);
+      logger.info("User logged in successfully");
+      return res.status(200).json({ authtoken, userName, userEmail });
+    } else {
+      logger.error("User not found");
+      return res.status(400).json({ error: "Invalid credentials" });
+    }
+  } catch (error) {
+    return res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
 module.exports = router;

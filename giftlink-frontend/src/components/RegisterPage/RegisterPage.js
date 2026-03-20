@@ -1,14 +1,46 @@
 import React, { useState } from "react";
+import { urlConfig } from "../../config";
+import { useAppContext } from "../../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 function RegisterPage() {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showError, setShowError] = useState(false);
 
-  const handleSubmit = (e) => {
+  const navigate = useNavigate();
+  const { setIsLoggedIn, setUserName } = useAppContext();
+
+  const handleRegister = async (e) => {
     e.preventDefault();
-    // Here you would typically send the registration data to your server
+    try {
+      const response = await fetch(
+        `${urlConfig.backendUrl}/api/auth/register`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ firstName, lastName, email, password }),
+        },
+      );
+      const json = await response.json();
+      if (json.authToken) {
+        sessionStorage.setItem("auth-token", json.authtoken);
+        sessionStorage.setItem("name", firstName);
+        sessionStorage.setItem("email", json.email);
+        setIsLoggedIn(true);
+        navigate("/app");
+      }
+
+      if (json.error) {
+        setShowError(true);
+      }
+    } catch (error) {
+      console.error("Error registering user:", error);
+    }
     console.log("Registering user:", { firstName, lastName, password, email });
   };
 
@@ -18,8 +50,12 @@ function RegisterPage() {
         <div className="col-md-6 col-lg-4">
           <div className="register-card p-4 border rounded">
             <h2 className="text-center mb-4 font-weight-bold">Register</h2>
-            {/* insert code here to create input elements for all the variables - firstName, lastName, email, password */}
-            {/* insert code here to create a button that performs the `handleRegister` function on click */}
+            {showError && (
+              <div className="alert alert-danger" role="alert">
+                Error registering user. Please try again.
+              </div>
+            )}
+
             <div className="mb-3">
               <label htmlFor="exampleFormControlInput1" className="form-label">
                 First Name
@@ -76,7 +112,7 @@ function RegisterPage() {
               <button
                 type="button"
                 className="btn btn-primary w-100"
-                onClick={handleSubmit}
+                onClick={handleRegister}
               >
                 Register
               </button>

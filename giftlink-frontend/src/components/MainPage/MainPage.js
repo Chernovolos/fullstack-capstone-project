@@ -27,6 +27,7 @@ function MainPage() {
 
   // Task 2: Navigate to details page
   const goToDetailsPage = (productId) => {
+    console.log("Product ID type:", typeof productId, "value:", productId);
     navigate(`/app/product/${productId}`);
   };
 
@@ -48,37 +49,43 @@ function MainPage() {
   };
 
   return (
-    <div className="container text-center">
-      <div className="row justify-content-md-center">
+    <div className="container py-4">
+      <div className="row justify-content-center">
         {gifts.map((gift) => (
-          <div key={gift.id} className="col-md-4 mb-4">
-            <div className="card product-card border-0 shadow-sm rounded-2">
-              {/* // Task 4: Display gift image or placeholder */}
-              {/* // Write your code below this line */}
-              <div className="image-placeholder">
+          <div key={gift.id} className="col-sm-6 col-md-4 col-lg-3 mb-4">
+            <div className="card product-card shadow-sm rounded-3 border-0 h-100">
+              <div className="image-placeholder position-relative overflow-hidden">
                 {gift.image ? (
-                  <img src={gift.image} alt={gift.name} />
+                  <img
+                    src={gift.image}
+                    alt={gift.name}
+                    className="card-img-top img-fluid"
+                  />
                 ) : (
-                  <div className="no-image-available">No Image Available</div>
+                  <div className="no-image-available d-flex align-items-center justify-content-center">
+                    No Image Available
+                  </div>
                 )}
               </div>
 
-              <div className="card-body">
-                {/* // Task 5: Display gift image or placeholder */}
-                {/* // Write your code below this line */}
-                <h5 className="card-title">{gift.name}</h5>
-                <p className={`card-text ${getConditionClass(gift.condition)}`}>
+              <div className="card-body d-flex flex-column">
+                <h5 className="card-title text-truncate" title={gift.name}>
+                  {gift.name}
+                </h5>
+
+                <p
+                  className={`card-text mb-2 ${getConditionClass(gift.condition)}`}
+                >
                   {gift.condition}
                 </p>
 
-                {/* // Task 6: Display gift image or placeholder */}
-                {/* // Write your code below this line */}
-                <p className="card-text date-added">
+                <p className="card-text text-muted small mb-3 date-added">
                   {formatDate(gift.date_added)}
                 </p>
+
                 <button
                   onClick={() => goToDetailsPage(gift.id)}
-                  className="btn btn-primary"
+                  className="btn btn-primary mt-auto"
                 >
                   View Details
                 </button>

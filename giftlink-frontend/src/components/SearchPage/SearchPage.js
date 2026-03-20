@@ -67,7 +67,14 @@ function SearchPage() {
 
   const goToDetailsPage = (productId) => {
     // Task 6. Enable navigation to the details page of a selected gift.
-    navigate(`/app/gifts/${productId}`);
+    // navigate(`/app/gifts/${productId}`);
+    navigate(`/app/product/${productId}`);
+  };
+
+  const getConditionClass = (condition) => {
+    return condition === "New"
+      ? "list-group-item-success"
+      : "list-group-item-warning";
   };
 
   return (
@@ -144,33 +151,37 @@ function SearchPage() {
       <div className="row d-flex justify-content-start">
         {searchResults.length > 0 ? (
           searchResults.map((product) => (
-            <div className="col-md-4" key={product.id}>
-              <div className="search-results mt-4">
-                <div
-                  key={product.id}
-                  className="card mb-3 border-0 shadow-sm rounded-2"
-                >
+            <div className="col-sm-6 col-md-4 col-lg-3 mb-4" key={product.id}>
+              <div className="card product-card card product-card shadow-sm rounded-3 border-0 h-100">
+                <div className="image-placeholder position-relative overflow-hidden">
                   {product.image && (
                     <img
                       src={product.image}
                       alt={product.name}
-                      className="card-img-top"
+                      className="card-img-top product-image img-fluid"
                     />
                   )}
-                  <div className="card-body">
-                    <h5 className="card-title">{product.name}</h5>
-                    <p className="card-text">
+                </div>
+                <div className="card-body product-card-body">
+                  <h5 className="card-title text-truncate">{product.name}</h5>
+                  <p
+                    className={`card-text product-condition ${getConditionClass(product.condition)}`}
+                  >
+                    {product.condition}
+                  </p>
+
+                  <p className="card-text product-condition">
+                    <small class="text-body-secondary">
+                      {" "}
                       {product.description.slice(0, 100)}...
-                    </p>
-                  </div>
-                  <div className="card-footer">
-                    <button
-                      onClick={() => goToDetailsPage(product.id)}
-                      className="btn btn-primary"
-                    >
-                      View More
-                    </button>
-                  </div>
+                    </small>
+                  </p>
+                  <button
+                    className="btn btn-primary mt-auto view-details-btn"
+                    onClick={() => goToDetailsPage(product.id)}
+                  >
+                    View Details
+                  </button>
                 </div>
               </div>
             </div>

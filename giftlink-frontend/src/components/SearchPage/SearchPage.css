@@ -13,94 +13,46 @@
   width: 20%; /* Adjust based on your design preference */
 }
 
-.card {
+.card-search-page {
   transition:
     transform 0.25s ease,
     box-shadow 0.25s ease;
   border: none;
 }
 
-.card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-}
-
-.card-body {
-  padding: 1rem;
-}
-
-.card-footer {
-  text-align: right;
-  padding: 0.5rem 1rem;
-  border-top: 1px solid #ddd;
-}
-
-.card-title {
-  font-size: 1.2rem;
-  color: #0056b3;
-}
-
-.card-text {
-  color: #333;
-  margin-bottom: 0.5rem;
-}
-
-.btn-info {
-  color: #fff;
-  background-color: #17a2b8;
-  border-color: #17a2b8;
-}
-
-.btn-info:hover {
-  background-color: #138496;
-  border-color: #117a8b;
-}
-
 .fas.fa-arrow-right {
   margin-left: 5px;
 }
 
-.card-img-top {
-  width: 100%; /* Full width */
-  height: 180px; /* Fixed height */
-  object-fit: cover; /* Cover the entire area without stretching */
+.product-card {
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s;
 }
 
-.card {
-  transition: box-shadow 0.3s ease-in-out;
+.product-card:hover {
+  transform: translateY(-5px);
 }
 
-.card:hover {
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+.product-image {
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+  height: 200px;
+  object-fit: cover;
 }
 
-.card-body {
-  padding: 1rem;
+.product-condition {
+  /* color: #333333; */
+  font-weight: 500;
 }
 
-.card-footer {
-  text-align: center;
-  padding: 1rem;
-  border-top: none;
-}
-
-.card-title {
-  font-size: 1.2rem;
-  color: #0056b3;
-  margin-bottom: 0.5rem;
-}
-
-.card-text {
-  color: #333;
-}
-
-.btn-primary {
-  background-color: #009688; /* A shade of teal for a modern look */
+.view-details-btn {
+  background-color: #009688; /* власний колір кнопки */
   border: none;
 }
 
-.btn-primary:hover {
-  background-color: #00796b; /* A darker shade of teal for hover state */
+.view-details-btn:hover {
+  background-color: #00796b;
 }
 
 /* Responsive design for smaller screens */

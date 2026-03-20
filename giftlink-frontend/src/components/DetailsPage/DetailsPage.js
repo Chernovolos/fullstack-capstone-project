@@ -26,7 +26,11 @@ function DetailsPage() {
           `${urlConfig.backendUrl}/api/gifts/${productId}`,
         );
         if (!response.ok) {
-          throw new Error("Network response was not ok");
+          if (response.status === 404) {
+            setError("Gift not found");
+          } else {
+            throw new Error("Network response was not ok");
+          }
         }
         const data = await response.json();
         setGift(data);
@@ -41,7 +45,7 @@ function DetailsPage() {
 
     // Task 3: Scroll to top on component mount
     window.scrollTo(0, 0);
-  }, [productId]);
+  }, [productId, navigate]);
 
   const handleBackClick = () => {
     // Task 4: Handle back click
@@ -82,51 +86,45 @@ function DetailsPage() {
       <button className="btn btn-secondary mb-3" onClick={handleBackClick}>
         Back
       </button>
-      <div className="card product-details-card">
-        <div className="card-header text-white">
-          <h2 className="details-title">{gift.name}</h2>
-        </div>
+
+      <div className="card mb-3">
+        {gift.image ? (
+          <img
+            src={gift.image}
+            alt={gift.name}
+            className="product-image-large card-img-top"
+          />
+        ) : (
+          <div className="no-image-available-large">No Image Available</div>
+        )}
         <div className="card-body">
-          <div className="image-placeholder-large">
-            {gift.image ? (
-              // Task 5: Display gift image
-              /*insert code here*/
-              <img
-                src={gift.image}
-                alt={gift.name}
-                className="product-image-large"
-              />
-            ) : (
-              <div className="no-image-available-large">No Image Available</div>
-            )}
-          </div>
-          // Task 6: Display gift details
-          <p>
-            <strong>Category:</strong>
-            {gift.category}
-          </p>
-          <p>
-            <strong>Condition:</strong>
+          <h5 className="card-title">{gift.name}</h5>
+          <p className="card-text">
+            <strong>Condition: </strong>
             {gift.condition}
           </p>
-          <p>
-            <strong>Date Added:</strong>
-            {gift.dateAdded}
+          <p className="card-text">
+            <strong>Date Added: </strong>
+            {new Date(gift.date_added * 1000).toLocaleDateString()}
           </p>
-          <p>
-            <strong>Age (Years):</strong>
-            {gift.age}
+          <p className="card-text">
+            <strong>Age (Years): </strong>
+            {gift.age_years}
           </p>
-          <p>
-            <strong>Description:</strong>
+          <p className="card-text">
+            <strong>Description: </strong>
             {gift.description}
+          </p>
+          <p className="card-text">
+            <small className="text-body-secondary">
+              Last updated 3 mins ago
+            </small>
           </p>
         </div>
       </div>
+
       <div className="comments-section mt-4">
         <h3 className="mb-3">Comments</h3>
-        // Task 7: Render comments section by using the map function to go
-        through all the comments
         {comments.map((comment, index) => (
           <div key={index} className="card mb-3">
             <div className="card-body">
