@@ -15,7 +15,7 @@ router.get("/", async (req, res, next) => {
 
     // Add the name filter to the query if the name parameter is not empty
     // if (/* {{insert code here}} */) {
-    if (query.name && query.name.trim() !== "") {
+    if (req.query.name && req.query.name.trim() !== "") {
       query.name = { $regex: req.query.name, $options: "i" }; // Using regex for partial match, case-insensitive
     }
     // }
@@ -31,7 +31,7 @@ router.get("/", async (req, res, next) => {
     }
     if (req.query.age_years && !isNaN(req.query.age_years)) {
       // {{insert code here}}
-      query.age_years = { $lte: parseInt(req.query.age_years) };
+      query.age_years = { $lte: parseFloat(req.query.age_years) };
     }
 
     // Task 4: Fetch filtered gifts using the find(query) method. Make sure to use await and store the result in the `gifts` constant

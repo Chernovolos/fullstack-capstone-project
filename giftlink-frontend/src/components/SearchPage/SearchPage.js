@@ -14,13 +14,11 @@ function SearchPage() {
   const categories = ["Living", "Bedroom", "Bathroom", "Kitchen", "Office"];
   const conditions = ["New", "Like New", "Older"];
 
-  console.log("searchResults: ", searchResults);
   useEffect(() => {
     // fetch all products
     const fetchProducts = async () => {
       try {
         let url = `${urlConfig.backendUrl}/api/gifts`;
-        console.log(url);
         const response = await fetch(url);
         if (!response.ok) {
           //something went wrong
@@ -39,25 +37,22 @@ function SearchPage() {
   // Task 2. Fetch search results from the API based on user inputs.
 
   const handleSearch = async () => {
-    console.log("Search query: ", searchQuery);
     const baseUrl = `${urlConfig.backendUrl}/api/search?`;
-    const queryParams = new URLSearchParams({
-      name: searchQuery,
-      age_years: ageRange,
-      category: categorySelect,
-      condition: conditionSelect,
-    }).toString();
-    console.log("Query params: ", queryParams);
+    const params = new URLSearchParams();
+
+    if (searchQuery) params.append("name", searchQuery);
+    if (ageRange) params.append("age_years", ageRange);
+    if (categorySelect) params.append("category", categorySelect);
+    if (conditionSelect) params.append("condition", conditionSelect);
 
     try {
-      const response = await fetch(`${baseUrl}${queryParams}`);
+      const response = await fetch(`${baseUrl}${params}`);
 
       if (!response.ok) {
         throw new Error(`HTTP error; ${response.status}`);
       }
       const data = await response.json();
       setSearchResults(data);
-      console.log("Search response: ", data);
     } catch (error) {
       console.error("Search error: ", error);
     }
@@ -66,8 +61,6 @@ function SearchPage() {
   const navigate = useNavigate();
 
   const goToDetailsPage = (productId) => {
-    // Task 6. Enable navigation to the details page of a selected gift.
-    // navigate(`/app/gifts/${productId}`);
     navigate(`/app/product/${productId}`);
   };
 
@@ -119,10 +112,10 @@ function SearchPage() {
                 type="range"
                 className="form-control-range"
                 id="ageRange"
-                min="1"
+                min="6"
                 max="10"
                 value={ageRange}
-                onChange={(e) => setAgeRange(e.target.value)}
+                onChange={(e) => setAgeRange(Number(e.target.value))}
               />
             </div>
           </div>
@@ -171,9 +164,9 @@ function SearchPage() {
                   </p>
 
                   <p className="card-text product-condition">
-                    <small class="text-body-secondary">
+                    <small className="text-body-secondary">
                       {" "}
-                      {product.description.slice(0, 100)}...
+                      {product.description?.slice(0, 100)}...
                     </small>
                   </p>
                   <button

@@ -8,8 +8,12 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     const token = sessionStorage.getItem("auth-token");
+    const name = sessionStorage.getItem("name");
     if (token) {
       setIsLoggedIn(true);
+      if (name) {
+        setUserName(name);
+      }
     }
   }, []);
 

@@ -37,12 +37,6 @@ body,
   color: #6c757d; /* Muted grey */
 }
 
-/* Success color for messages or confirmation */
-.text-success,
-.btn-success {
-  color: #28a745; /* Fresh green */
-}
-
 .container {
   /* padding: 2rem 15%; Adds more space on the sides */
 }
@@ -111,14 +105,6 @@ body,
   display: block; /* Disables inline-block default of buttons */
   width: 100%; /* Full width */
   box-sizing: border-box; /* Includes padding and border in the width */
-}
-/* Highlight condition and age with color */
-.list-group-item-success {
-  color: #28a745; /* Green text color for new items */
-}
-
-.list-group-item-warning {
-  color: #ffc107; /* Yellow text color for older items */
 }
 
 /* Customize the navbar brand and links */

@@ -8,6 +8,16 @@ function LoginPage() {
   const [password, setPassword] = useState("");
   const [incorrect, setIncorrect] = useState("");
 
+  const [errors, setErrors] = useState({
+    email: "",
+    password: "",
+  });
+
+  const [touched, setTouched] = useState({
+    email: false,
+    password: false,
+  });
+
   const navigate = useNavigate();
   const barerToken = sessionStorage.getItem("auth-token");
   const { setIsLoggedIn } = useAppContext();
@@ -18,42 +28,85 @@ function LoginPage() {
     }
   }, [navigate]);
 
+  const validateField = (name, value) => {
+    switch (name) {
+      case "email":
+        return /\S+@\S+\.\S+/.test(value) ? "" : "Invalid email address";
+      case "password":
+        return value ? "" : "Password is required";
+      default:
+        return "";
+    }
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+
+    if (name === "email") setEmail(value);
+    if (name === "password") setPassword(value);
+
+    setIncorrect("");
+
+    setErrors((prev) => ({
+      ...prev,
+      [name]: validateField(name, value),
+    }));
+  };
+
+  const handleFocus = (name) => {
+    setTouched((prev) => ({ ...prev, [name]: true }));
+  };
+
+  const isDisabled =
+    !email || !password || Object.values(errors).some((e) => e !== "");
+
+  const handleBlur = (name, value) => {
+    setErrors((prev) => ({
+      ...prev,
+      [name]: validateField(name, value),
+    }));
+  };
+
   const handleLogin = async (e) => {
     e.preventDefault();
-    try {
-      const headers = { "Content-Type": "application/json" };
-      if (barerToken) headers["Authorization"] = `Bearer ${barerToken}`;
 
+    const newErrors = {
+      email: validateField("email", email),
+      password: validateField("password", password),
+    };
+    setErrors(newErrors);
+
+    if (Object.values(newErrors).some((err) => err !== "")) return;
+
+    try {
+      // const headers = { "Content-Type": "application/json" };
+      // if (barerToken) headers["Authorization"] = `Bearer ${barerToken}`;
       const res = await fetch(`${urlConfig.backendUrl}/api/auth/login`, {
         method: "POST",
-        headers,
-        body: JSON.stringify({
-          email,
-          password,
-        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
       });
+
+      const data = await res.json();
+      if (res.status === 401) {
+        setIncorrect("Wrong email or password");
+        setTimeout(() => setIncorrect(""), 2000);
+        return;
+      }
 
       if (!res.ok) {
         setIncorrect("Server error. Try again later.");
         return;
       }
 
-      const json = await res.json();
+      sessionStorage.setItem("auth-token", data.authToken);
+      sessionStorage.setItem("name", data.firstName);
+      sessionStorage.setItem("email", data.email);
 
-      if (json.authtoken) {
-        sessionStorage.setItem("auth-token", json.authtoken);
-        sessionStorage.setItem("name", json.userName);
-        sessionStorage.setItem("email", json.email);
-
-        setIsLoggedIn(true);
-
-        navigate("/app");
-      } else {
-        setEmail("");
-        setPassword("");
-        setIncorrect("Wrong email oe password");
-        setTimeout(() => setIncorrect(""), 2000);
-      }
+      setIsLoggedIn(true);
+      navigate("/app");
     } catch (error) {
       console.error(error);
       setIncorrect("Network error. Try again later.");
@@ -66,55 +119,56 @@ function LoginPage() {
         <div className="col-md-6 col-lg-4">
           <div className="login-card p-4 border rounded">
             <h2 className="text-center mb-4 font-weight-bold">Login</h2>
+
+            {incorrect && (
+              <div className="alert alert-danger" role="alert">
+                {incorrect}
+              </div>
+            )}
+
             <div className="mb-3">
               <label htmlFor="exampleFormControlInput1" className="form-label">
                 Email address
               </label>
               <input
                 type="email"
-                className="form-control"
-                id="email"
+                name="email"
+                className={`form-control ${errors.email ? "is-invalid" : ""}`}
                 placeholder="Enter your email"
                 value={email}
-                onChange={(e) => {
-                  setEmail(e.target.value);
-                  setIncorrect("");
-                }}
+                onChange={handleChange}
+                onFocus={() => handleFocus("email")}
+                onBlur={() => handleBlur("email", email)}
               />
+              {touched.email && errors.email && (
+                <div className="invalid-feedback">{errors.email}</div>
+              )}
             </div>
+
             <div className="mb-3">
               <label htmlFor="exampleFormControlInput1" className="form-label">
                 Password
               </label>
               <input
                 type="password"
-                className="form-control"
-                id="password"
+                name="password"
+                className={`form-control ${errors.password ? "is-invalid" : ""}`}
                 placeholder="Enter your password"
                 value={password}
-                onChange={(e) => {
-                  setPassword(e.target.value);
-                  setIncorrect("");
-                }}
+                onChange={handleChange}
+                onFocus={() => handleFocus("password")}
+                onBlur={() => handleBlur("password", password)}
               />
-
-              <span
-                style={{
-                  color: "red",
-                  height: ".5cm",
-                  display: "block",
-                  fontStyle: "italic",
-                  fontSize: "12px",
-                }}
-              >
-                {incorrect}
-              </span>
+              {touched.password && errors.password && (
+                <div className="invalid-feedback">{errors.password}</div>
+              )}
             </div>
             <div className="input-group mb-3">
               <button
                 type="button"
                 className="btn btn-primary w-100"
                 onClick={handleLogin}
+                disabled={isDisabled}
               >
                 Login
               </button>

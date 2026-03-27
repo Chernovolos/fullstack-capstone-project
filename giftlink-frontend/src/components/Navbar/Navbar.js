@@ -10,20 +10,27 @@ export default function Navbar() {
   useEffect(() => {
     const authTokenFromSession = sessionStorage.getItem("auth-token");
     const nameFromSession = sessionStorage.getItem("name");
+
     if (authTokenFromSession) {
-      if (isLoggedIn && nameFromSession) {
+      setIsLoggedIn(true);
+
+      if (nameFromSession) {
         setUserName(nameFromSession);
-      } else {
-        sessionStorage.removeItem("auth-token");
-        sessionStorage.removeItem("name");
-        sessionStorage.removeItem("email");
-        setIsLoggedIn(false);
       }
     }
-  }, []);
+  }, [isLoggedIn, setIsLoggedIn, setUserName]);
 
   const profileSection = () => {
     navigate(`/app/profile`);
+  };
+
+  const handleLogout = () => {
+    sessionStorage.removeItem("auth-token");
+    sessionStorage.removeItem("name");
+    sessionStorage.removeItem("email");
+    setIsLoggedIn(false);
+    setUserName("");
+    navigate("/app/login");
   };
 
   return (
@@ -45,9 +52,9 @@ export default function Navbar() {
         </button>
         <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
           <div className="navbar-nav">
-            <a className="nav-link" href="/home.html">
+            <Link className="nav-link" to="/">
               Home
-            </a>
+            </Link>
             <Link className="nav-link" to="/app">
               Gifts
             </Link>
@@ -61,10 +68,16 @@ export default function Navbar() {
               <>
                 <span className="navbar-text me-3">Welcome, {userName}!</span>
                 <button
-                  className="btn btn-outline-secondary"
+                  className="btn btn-outline-secondary me-2"
                   onClick={profileSection}
                 >
                   Profile
+                </button>
+                <button
+                  className="btn btn-outline-danger"
+                  onClick={handleLogout}
+                >
+                  Logout
                 </button>
               </>
             ) : (
