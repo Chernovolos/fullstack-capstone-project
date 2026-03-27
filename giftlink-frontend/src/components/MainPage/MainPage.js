@@ -43,9 +43,9 @@ function MainPage() {
   };
 
   const getConditionClass = (condition) => {
-    return condition === "New"
-      ? "list-group-item-success"
-      : "list-group-item-warning";
+    if (condition === "New") return "text-success";
+    if (condition === "Like New") return "text-warning";
+    return "text-danger";
   };
 
   return (

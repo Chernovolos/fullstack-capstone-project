@@ -143,6 +143,7 @@ function RegisterPage() {
         sessionStorage.setItem("name", firstName);
         sessionStorage.setItem("email", json.email);
 
+        setUserName(firstName);
         setIsLoggedIn(true);
         navigate("/app");
       } else {

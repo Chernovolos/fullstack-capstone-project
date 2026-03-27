@@ -19,7 +19,7 @@ function LoginPage() {
   });
 
   const navigate = useNavigate();
-  const barerToken = sessionStorage.getItem("auth-token");
+  const bearerToken = sessionStorage.getItem("auth-token");
   const { setIsLoggedIn } = useAppContext();
 
   useEffect(() => {
@@ -79,13 +79,11 @@ function LoginPage() {
     if (Object.values(newErrors).some((err) => err !== "")) return;
 
     try {
-      // const headers = { "Content-Type": "application/json" };
-      // if (barerToken) headers["Authorization"] = `Bearer ${barerToken}`;
+      const headers = { "Content-Type": "application/json" };
+      if (bearerToken) headers["Authorization"] = `Bearer ${bearerToken}`;
       const res = await fetch(`${urlConfig.backendUrl}/api/auth/login`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers,
         body: JSON.stringify({ email, password }),
       });
 
