@@ -7,7 +7,6 @@ const { body, validationResult } = require("express-validator");
 const dotenv = require("dotenv");
 const pino = require("pino");
 
-const app = express();
 const logger = pino();
 dotenv.config();
 const JWT_SECRET = process.env.JWT_SECRET;

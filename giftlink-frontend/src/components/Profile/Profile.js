@@ -44,32 +44,7 @@ const Profile = () => {
       setUserDetails({ name, email });
       setUpdatedDetails({ name });
     }
-    // if (!authtoken) {
-    //   navigate("/app/login");
-    // } else {
-    //   fetchUserProfile();
-    // }
   }, [navigate]);
-
-  const fetchUserProfile = async () => {
-    try {
-      const authtoken = sessionStorage.getItem("auth-token");
-      const email = sessionStorage.getItem("email");
-      const name = sessionStorage.getItem("name");
-
-      if (name || authtoken) {
-        const storedUserDetails = {
-          name: name,
-          email: email,
-        };
-
-        setUserDetails(storedUserDetails);
-        setUpdatedDetails(storedUserDetails);
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
 
   const handleChange = (e) => {
     let value = e.target.value;
@@ -96,12 +71,6 @@ const Profile = () => {
     setError("");
     setTouched(false);
   };
-  // const handleInputChange = (e) => {
-  //   setUpdatedDetails({
-  //     ...updatedDetails,
-  //     [e.target.name]: e.target.value,
-  //   });
-  // };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -112,9 +81,6 @@ const Profile = () => {
     if (validationError) return;
 
     try {
-      // const authtoken = sessionStorage.getItem("auth-token");
-      // const email = sessionStorage.getItem("email");
-
       setLoading(true);
 
       const token = sessionStorage.getItem("auth-token");
@@ -124,8 +90,6 @@ const Profile = () => {
         navigate("/app/login");
         return;
       }
-
-      // const payload = { ...updatedDetails };
 
       const headers = {
         Authorization: `Bearer ${token}`,
