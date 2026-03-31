@@ -3,16 +3,23 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const pinoLogger = require("./logger");
-
+const { loadData } = require("./util/import-mongo/index");
 const connectToDatabase = require("./models/db");
 
 const app = express();
-app.use("*", cors());
+
+app.use(cors({
+  origin: 'https://mariachernov-9000.theiadockernext-0-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai',
+  credentials: true
+}));
+
 const port = 3060;
 
 connectToDatabase()
-  .then(() => {
+  .then( async () => {
     pinoLogger.info("Connected to DB");
+
+    await loadData();
   })
   .catch((e) => console.error("Failed to connect to DB", e));
 
